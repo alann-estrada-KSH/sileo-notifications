@@ -25,11 +25,28 @@ const docPath = (fw: Framework, slug: string) => (slug === DEFAULT_SLUG ? `/docs
 const docs = computed(() => DOCS_BY_FRAMEWORK[routeFramework.value]);
 const activeSlug = computed(() => (typeof route.params.slug === "string" ? route.params.slug : DEFAULT_SLUG));
 const activeDoc = computed(() => findDoc(routeFramework.value, activeSlug.value));
-const renderedHtml = computed(() => renderMarkdown(activeDoc.value.raw[locale.value]));
+const renderedHtml = computed(() => renderMarkdown(activeDoc.value.raw[locale.value], routeFramework.value));
 
 const githubUrl = computed(
     () => `${DOC_REPO_PATH[routeFramework.value]}/${activeDoc.value.slug}.md`,
 );
+
+// Code blocks are raw HTML (v-html, see renderMarkdown's wrapCodeBlocks) —
+// Vue can't bind a handler to a button that isn't a real Vue element, so
+// this delegates from the .prose container instead of one listener per block.
+const onProseClick = async (event: MouseEvent) => {
+    const btn = (event.target as HTMLElement).closest<HTMLButtonElement>(".copy-code-btn");
+    if (!btn) return;
+    const code = btn.closest(".code-block")?.querySelector("code");
+    if (!code?.textContent) return;
+    try {
+        await navigator.clipboard.writeText(code.textContent);
+        btn.classList.add("copied");
+        setTimeout(() => btn.classList.remove("copied"), 1600);
+    } catch {
+        // clipboard permissions can be denied — button just won't flash "copied"
+    }
+};
 </script>
 
 <template>
@@ -53,7 +70,7 @@ const githubUrl = computed(
                 </router-link>
             </aside>
 
-            <article class="prose" v-html="renderedHtml"></article>
+            <article class="prose" v-html="renderedHtml" @click="onProseClick"></article>
         </div>
 
         <a class="github-link" :href="githubUrl" target="_blank" rel="noreferrer">{{ t("docsPage").viewOnGithub }}</a>
@@ -232,8 +249,13 @@ const githubUrl = computed(
     color: var(--paper);
 }
 
-.prose :deep(pre) {
+.prose :deep(.code-block) {
+    position: relative;
     margin: 0 0 1.25rem;
+}
+
+.prose :deep(pre) {
+    margin: 0;
     padding: 1.1rem 1.3rem;
     border-radius: var(--radius-md);
     border: 1px solid var(--line);
@@ -247,6 +269,64 @@ const githubUrl = computed(
     color: var(--paper-dim);
     font-size: 0.85rem;
     line-height: 1.6;
+}
+
+.prose :deep(.copy-code-btn) {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.7rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line);
+    background: var(--ink-1);
+    color: var(--paper-faint);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 160ms var(--ease-out-expo), color 160ms var(--ease-out-expo), border-color 160ms var(--ease-out-expo);
+}
+
+.prose :deep(.code-block:hover .copy-code-btn),
+.prose :deep(.copy-code-btn:focus-visible) {
+    opacity: 1;
+}
+
+.prose :deep(.copy-code-btn:hover) {
+    color: var(--paper);
+    border-color: var(--accent);
+}
+
+.prose :deep(.copy-code-btn svg) {
+    width: 15px;
+    height: 15px;
+}
+
+.prose :deep(.copy-code-btn .icon-check) {
+    display: none;
+}
+
+.prose :deep(.copy-code-btn.copied) {
+    opacity: 1;
+    color: var(--state-success);
+    border-color: var(--state-success);
+}
+
+.prose :deep(.copy-code-btn.copied .icon-copy) {
+    display: none;
+}
+
+.prose :deep(.copy-code-btn.copied .icon-check) {
+    display: inline-flex;
+}
+
+@media (hover: none) {
+    /* No hover on touch — keep the button visible instead of unreachable. */
+    .prose :deep(.copy-code-btn) {
+        opacity: 1;
+    }
 }
 
 .prose :deep(table) {

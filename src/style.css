@@ -173,12 +173,15 @@ code, pre {
 .hero-body > *:nth-child(3) { animation-delay: 180ms; }
 .hero-body > *:nth-child(4) { animation-delay: 270ms; }
 
-/* ── Gooey field: the same blur+contrast trick the actual toast uses to fuse
-   header/body into one metaball shape (see Features copy), reused here as a
-   decorative backdrop so the site's chrome reads as the same product as the
-   thing it's selling, not a generic template around it. Pure CSS, no SVG:
-   a blurred `contrast()` filter forces soft blob edges into hard ones only
-   where two blobs overlap. One drifting blob-field per accent section. ── */
+/* ── Gooey field: soft drifting color-wash blobs, same family as the hero's
+   own radial glow, reused as a decorative backdrop so the site's chrome
+   reads as the same product as the thing it's selling. Blur only — an
+   earlier version stacked a heavy contrast() on top to mimic the toast's
+   actual blur+contrast metaball merge, but these blobs float independently
+   at low opacity rather than touching/merging, so that contrast threshold
+   just amplified rounding error into visible color-banding ("pixelated"
+   edges), worst on the blue blob. Blur alone gives the same soft wash the
+   hero-glow already uses without the artifact. ── */
 
 .goo-field {
     position: absolute;
@@ -186,7 +189,7 @@ code, pre {
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
-    filter: blur(28px) contrast(22);
+    filter: blur(60px);
 }
 
 .goo-field > span {

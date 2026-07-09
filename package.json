@@ -6,7 +6,7 @@
     "description": "Landing + docs hub for the Sileo toast notification family (React, Vue, Flutter).",
     "scripts": {
         "dev": "vite",
-        "build": "vite build",
+        "build": "node scripts/fetch-versions.mjs && vite-ssg build",
         "preview": "vite preview"
     },
     "dependencies": {
@@ -17,7 +17,9 @@
     },
     "devDependencies": {
         "@vitejs/plugin-vue": "^5.2.1",
+        "sharp": "^0.35.3",
         "typescript": "^5.8.3",
-        "vite": "^5.4.19"
+        "vite": "^5.4.19",
+        "vite-ssg": "^28.3.0"
     }
 }

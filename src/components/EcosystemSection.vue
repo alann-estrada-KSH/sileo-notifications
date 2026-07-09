@@ -2,22 +2,29 @@
 import { computed } from "vue";
 import { t } from "../i18n";
 import { framework, FRAMEWORK_META } from "../framework";
+import versions from "../generated/versions.json";
 
 // href is a layout/link concern, language-agnostic, kept out of the
 // translated copy — mirrors the SPANS pattern in FeatureGrid.vue. "react"
 // is the upstream original by @hiaaryan, not part of the framework switcher,
-// so it's never highlighted as "current".
+// so it's never highlighted as "current" — and it's not our package to
+// version-badge, so it has no VERSION entry.
 const HREF: Record<string, string> = {
     react: "https://github.com/hiaaryan/sileo",
     vue: FRAMEWORK_META.vue.repo,
     flutter: "https://pub.dev/packages/sileo_flutter",
 };
 
+// Refreshed at build time from npm/pub.dev (scripts/fetch-versions.mjs) so
+// this doesn't go stale the way a hand-typed version string would.
+const VERSION: Partial<Record<string, string>> = { vue: versions.vue, flutter: versions.flutter };
+
 const items = computed(() =>
     t("ecosystem").items.map((item) => ({
         ...item,
         current: item.id === framework.value,
         href: item.id === framework.value ? null : HREF[item.id],
+        version: VERSION[item.id],
     })),
 );
 </script>
@@ -44,7 +51,10 @@ const items = computed(() =>
                 :class="{ current: item.current }"
                 v-bind="item.href ? { href: item.href, target: '_blank', rel: 'noreferrer' } : {}"
             >
-                <span class="tag">{{ item.tag }}</span>
+                <span class="tag-row">
+                    <span class="tag">{{ item.tag }}</span>
+                    <span v-if="item.version" class="version-badge">v{{ item.version }}</span>
+                </span>
                 <h3>{{ item.name }}</h3>
                 <p>{{ item.body }}</p>
                 <span class="cta">{{ item.current ? t("ecosystem").currentCta : item.cta }}</span>
@@ -103,6 +113,12 @@ const items = computed(() =>
     box-shadow: var(--glow-accent);
 }
 
+.tag-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .tag {
     display: inline-block;
     font-family: var(--font-mono);
@@ -110,6 +126,16 @@ const items = computed(() =>
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--accent);
+}
+
+.version-badge {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--paper-faint);
 }
 
 .card h3 {

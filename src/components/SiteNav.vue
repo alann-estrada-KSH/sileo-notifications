@@ -6,6 +6,7 @@ import { navHeight } from "../lib/navMetrics";
 import FrameworkToggle from "./FrameworkToggle.vue";
 import LanguageToggle from "./LanguageToggle.vue";
 import ThemeToggle from "./ThemeToggle.vue";
+import DocsSearch from "./DocsSearch.vue";
 
 const navEl = ref<HTMLElement | null>(null);
 let observer: ResizeObserver | null = null;
@@ -31,6 +32,7 @@ onUnmounted(() => observer?.disconnect());
             <a :href="FRAMEWORK_META[framework].repo" target="_blank" rel="noreferrer">{{ t("nav").github }}</a>
         </div>
         <div class="nav-toggles">
+            <DocsSearch />
             <FrameworkToggle />
             <ThemeToggle />
             <LanguageToggle />
