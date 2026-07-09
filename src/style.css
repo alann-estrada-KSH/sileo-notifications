@@ -27,8 +27,13 @@
     --radius-lg: 28px;
     --radius-md: 18px;
     --radius-sm: 10px;
+    --radius-pill: 999px;
 
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Glow tuned to look like a toast's own drop shadow — reused on card
+       hover so the chrome around the product picks up its signature. */
+    --glow-accent: 0 0 0 1px var(--accent), 0 12px 32px -8px oklch(0.623 0.214 259.815 / 45%);
 }
 
 /* Light mode: same hue system, surfaces and text swap lightness. Toggled via
@@ -168,6 +173,38 @@ code, pre {
 .hero-body > *:nth-child(3) { animation-delay: 180ms; }
 .hero-body > *:nth-child(4) { animation-delay: 270ms; }
 
+/* ── Gooey field: the same blur+contrast trick the actual toast uses to fuse
+   header/body into one metaball shape (see Features copy), reused here as a
+   decorative backdrop so the site's chrome reads as the same product as the
+   thing it's selling, not a generic template around it. Pure CSS, no SVG:
+   a blurred `contrast()` filter forces soft blob edges into hard ones only
+   where two blobs overlap. One drifting blob-field per accent section. ── */
+
+.goo-field {
+    position: absolute;
+    inset: -10% -5%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    filter: blur(28px) contrast(22);
+}
+
+.goo-field > span {
+    position: absolute;
+    border-radius: var(--radius-pill);
+    mix-blend-mode: screen;
+}
+
+@keyframes blob-drift-a {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(4%, 6%) scale(1.08); }
+}
+
+@keyframes blob-drift-b {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-5%, -4%) scale(0.94); }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .reveal {
         opacity: 1;
@@ -180,4 +217,22 @@ code, pre {
         opacity: 1;
         transform: none;
     }
+
+    .goo-field > span {
+        animation: none !important;
+    }
+}
+
+/* ── Shared hover language for cards: border + lift + glow, so every card
+   across Features/Ecosystem picks up the same "pop" a toast does on
+   arrival instead of each section inventing its own hover feel. ── */
+
+.card-pop {
+    transition: border-color 220ms var(--ease-out-expo), transform 220ms var(--ease-out-expo), box-shadow 220ms var(--ease-out-expo);
+}
+
+a.card-pop:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px -18px oklch(0.623 0.214 259.815 / 55%);
 }

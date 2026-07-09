@@ -1,21 +1,34 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { t, locale } from "../i18n";
-import { framework } from "../framework";
+import { framework, setFramework, type Framework } from "../framework";
 import { DOCS_BY_FRAMEWORK, DEFAULT_SLUG, DOC_REPO_PATH, findDoc } from "../docs-content";
 import { renderMarkdown } from "../lib/renderMarkdown";
 import FrameworkToggle from "../components/FrameworkToggle.vue";
 
 const route = useRoute();
 
-const docs = computed(() => DOCS_BY_FRAMEWORK[framework.value]);
+// The URL is the source of truth for which framework's docs to show — keep
+// the global toggle (nav, other sections) in sync with it rather than the
+// other way around, so a direct link to /docs/flutter/styling renders
+// Flutter even if the visitor never touched the toggle.
+const routeFramework = computed<Framework>(() =>
+    route.params.framework === "flutter" ? "flutter" : "vue",
+);
+watch(routeFramework, (fw) => {
+    if (fw !== framework.value) setFramework(fw);
+}, { immediate: true });
+
+const docPath = (fw: Framework, slug: string) => (slug === DEFAULT_SLUG ? `/docs/${fw}` : `/docs/${fw}/${slug}`);
+
+const docs = computed(() => DOCS_BY_FRAMEWORK[routeFramework.value]);
 const activeSlug = computed(() => (typeof route.params.slug === "string" ? route.params.slug : DEFAULT_SLUG));
-const activeDoc = computed(() => findDoc(framework.value, activeSlug.value));
+const activeDoc = computed(() => findDoc(routeFramework.value, activeSlug.value));
 const renderedHtml = computed(() => renderMarkdown(activeDoc.value.raw[locale.value]));
 
 const githubUrl = computed(
-    () => `${DOC_REPO_PATH[framework.value]}/${activeDoc.value.slug}.md`,
+    () => `${DOC_REPO_PATH[routeFramework.value]}/${activeDoc.value.slug}.md`,
 );
 </script>
 
@@ -33,9 +46,9 @@ const githubUrl = computed(
                     :key="doc.slug"
                     class="sidebar-link"
                     :class="{ active: doc.slug === activeSlug }"
-                    :to="doc.slug === DEFAULT_SLUG ? '/docs' : `/docs/${doc.slug}`"
+                    :to="docPath(routeFramework, doc.slug)"
                 >
-                    <span class="sidebar-title">{{ doc.title }}</span>
+                    <span class="sidebar-title">{{ doc.title[locale] }}</span>
                     <span class="sidebar-desc">{{ doc.desc[locale] }}</span>
                 </router-link>
             </aside>

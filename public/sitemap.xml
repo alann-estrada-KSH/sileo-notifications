@@ -5,9 +5,27 @@
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
+
   <url>
-    <loc>https://alann-estrada-ksh.github.io/sileo-notifications/#/docs</loc>
+    <loc>https://alann-estrada-ksh.github.io/sileo-notifications/docs/vue</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
+  <url><loc>https://alann-estrada-ksh.github.io/sileo-notifications/docs/vue/getting-started</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://alann-estrada-ksh.github.io/sileo-notifications/docs/vue/api-reference</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://alann-estrada-ksh.github.io/sileo-notifications/docs/vue/examples</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://alann-estrada-ksh.github.io/sileo-notifications/docs/vue/styling</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://alann-estrada-ksh.github.io/sileo-notifications/docs/vue/advanced-features</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://alann-estrada-ksh.github.io/sileo-notifications/docs/vue/implementation-notes</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://alann-estrada-ksh.github.io/sileo-notifications/docs/vue/migration-guide</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+  <url>
+    <loc>https://alann-estrada-ksh.github.io/sileo-notifications/docs/flutter</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url><loc>https://alann-estrada-ksh.github.io/sileo-notifications/docs/flutter/getting-started</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://alann-estrada-ksh.github.io/sileo-notifications/docs/flutter/api-reference</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://alann-estrada-ksh.github.io/sileo-notifications/docs/flutter/styling</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://alann-estrada-ksh.github.io/sileo-notifications/docs/flutter/advanced-features</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>

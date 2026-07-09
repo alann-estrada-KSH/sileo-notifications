@@ -4,10 +4,26 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="text/javascript">
+        // Decodes the query-string-encoded path 404.html produced for a deep
+        // link GitHub Pages couldn't resolve server-side, back into a real
+        // path via history.replaceState — before Vue Router reads the URL.
+        // Pair of https://github.com/rafgraph/spa-github-pages. No-op on a
+        // normal load (search[1] isn't "/").
+        (function (l) {
+            if (l.search[1] === "/") {
+                var decoded = l.search.slice(1).split("&").map(function (s) {
+                    return s.replace(/~and~/g, "&");
+                }).join("?");
+                window.history.replaceState(null, "", l.pathname.slice(0, -1) + decoded + l.hash);
+            }
+        })(window.location);
+    </script>
     <script>
         // Apply the saved/preferred color scheme before first paint so there's
         // no flash of the wrong theme while Vue boots (see src/theme.ts, which
-        // this mirrors and then takes over reactively once the app mounts).
+        // this mirrors and then takes over reactively — including live OS
+        // theme changes — once the app mounts).
         (function () {
             try {
                 var stored = localStorage.getItem("sileo-landing-theme");
@@ -21,8 +37,10 @@
     </script>
     <title>Sileo — toast notifications for Vue &amp; Flutter</title>
     <meta name="description" content="Sileo is an opinionated toast notification family — gooey pill toasts, promise flows, grouping, swipe-to-dismiss, and full color theming, natively for Vue 3 and Flutter. Originally a React library by @hiaaryan." />
-    <meta name="keywords" content="toast notifications, Vue 3, Flutter, sileo-vue, sileo_flutter, UI component, notification library" />
+    <meta name="keywords" content="toast notifications, Vue 3, Flutter, sileo-vue, sileo_flutter, sileo, UI component, notification library, toast component, gooey toast" />
+    <meta name="author" content="Alan Estrada" />
     <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#8b6cf0" />
     <link rel="canonical" href="https://alann-estrada-ksh.github.io/sileo-notifications/" />
 
     <meta property="og:type" content="website" />
@@ -30,12 +48,14 @@
     <meta property="og:title" content="Sileo — toast notifications for Vue & Flutter" />
     <meta property="og:description" content="An opinionated toast notification family — gooey pill toasts, promise flows, grouping, swipe-to-dismiss, and full color theming, natively for Vue 3 and Flutter." />
     <meta property="og:url" content="https://alann-estrada-ksh.github.io/sileo-notifications/" />
+    <meta property="og:image" content="https://alann-estrada-ksh.github.io/sileo-notifications/og-image.svg" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:locale:alternate" content="es_ES" />
 
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Sileo — toast notifications for Vue & Flutter" />
     <meta name="twitter:description" content="An opinionated toast notification family — gooey pill toasts, promise flows, grouping, swipe-to-dismiss, and full color theming, natively for Vue 3 and Flutter." />
+    <meta name="twitter:image" content="https://alann-estrada-ksh.github.io/sileo-notifications/og-image.svg" />
 
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='10' width='28' height='12' rx='6' fill='%238b6cf0'/%3E%3Ccircle cx='9' cy='16' r='3.2' fill='%230a0710'/%3E%3C/svg%3E" />
 
@@ -45,6 +65,51 @@
         href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
         rel="stylesheet"
     />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Sileo",
+        "url": "https://alann-estrada-ksh.github.io/sileo-notifications/",
+        "description": "Sileo is an opinionated toast notification family — gooey pill toasts, promise flows, grouping, swipe-to-dismiss, and full color theming, natively for Vue 3 and Flutter.",
+        "inLanguage": ["en", "es"],
+        "author": { "@type": "Person", "name": "Alan Estrada", "url": "https://github.com/alann-estrada-KSH" }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Sileo toast notification ports",
+        "itemListElement": [
+            {
+                "@type": "SoftwareSourceCode",
+                "position": 1,
+                "name": "sileo",
+                "programmingLanguage": "TypeScript",
+                "codeRepository": "https://github.com/hiaaryan/sileo",
+                "description": "The original toast notification library, for React, by @hiaaryan."
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "position": 2,
+                "name": "sileo-vue",
+                "programmingLanguage": "TypeScript",
+                "codeRepository": "https://github.com/alann-estrada-KSH/sileo-vue",
+                "description": "Toast notification library for Vue 3, with grouping, promise flows, and full color theming."
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "position": 3,
+                "name": "sileo_flutter",
+                "programmingLanguage": "Dart",
+                "codeRepository": "https://github.com/alann-estrada-KSH/sileo-flutter",
+                "description": "Native Dart/Flutter port of sileo-vue, no platform channels."
+            }
+        ]
+    }
+    </script>
 </head>
 
 <body>

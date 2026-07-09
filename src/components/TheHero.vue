@@ -22,7 +22,7 @@ const copyInstall = async () => {
         <div class="hero-glow" aria-hidden="true"></div>
 
         <div class="hero-body container">
-            <p class="eyebrow">{{ FRAMEWORK_META[framework].label }} · {{ t("hero").eyebrowSuffix }}</p>
+            <p class="eyebrow">{{ t("hero").eyebrowSuffix }}</p>
             <h1 class="headline">
                 {{ t("hero").headline1 }}<br />
                 <em>{{ t("hero").headline2 }}</em>

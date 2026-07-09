@@ -11,7 +11,7 @@ import { DOCS_BY_FRAMEWORK } from "../docs-content";
 const docs = computed(() =>
     DOCS_BY_FRAMEWORK[framework.value]
         .filter((doc) => doc.slug !== "index")
-        .map((doc) => ({ slug: doc.slug, title: doc.title, desc: doc.desc[locale.value] })),
+        .map((doc) => ({ slug: doc.slug, title: doc.title[locale.value], desc: doc.desc[locale.value] })),
 );
 </script>
 
@@ -26,7 +26,7 @@ const docs = computed(() =>
                 :key="doc.slug"
                 v-reveal="i * 70"
                 class="doc-card"
-                :to="`/docs/${doc.slug}`"
+                :to="`/docs/${framework}/${doc.slug}`"
             >
                 <h3>{{ doc.title }}</h3>
                 <p>{{ doc.desc }}</p>

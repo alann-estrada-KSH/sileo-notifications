@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1226" />
+      <stop offset="100%" stop-color="#0a0710" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="20%" r="70%">
+      <stop offset="0%" stop-color="#8b6cf0" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#8b6cf0" stop-opacity="0" />
+    </radialGradient>
+    <filter id="goo">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="14" result="blur" />
+      <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect width="1200" height="630" fill="url(#glow)" />
+
+  <g filter="url(#goo)">
+    <rect x="120" y="150" width="220" height="90" rx="45" fill="#8b6cf0" />
+    <circle cx="180" cy="195" r="26" fill="#0a0710" />
+    <rect x="860" y="420" width="220" height="80" rx="40" fill="#7dffb3" opacity="0.9" />
+    <rect x="960" y="120" width="160" height="70" rx="35" fill="#ff6b81" opacity="0.85" />
+  </g>
+
+  <text x="120" y="330" font-family="Georgia, 'Times New Roman', serif" font-size="108" font-weight="600" fill="#f4efff">Sileo</text>
+  <text x="122" y="390" font-family="'Courier New', monospace" font-size="30" letter-spacing="1" fill="#c9bfe0">toast notifications, done with manners</text>
+  <text x="122" y="440" font-family="'Courier New', monospace" font-size="24" fill="#8f84ab">Vue 3 &#183; Flutter &#183; React</text>
+</svg>

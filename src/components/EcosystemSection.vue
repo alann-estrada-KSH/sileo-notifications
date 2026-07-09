@@ -24,6 +24,12 @@ const items = computed(() =>
 
 <template>
     <section id="ecosystem" class="ecosystem container">
+        <div class="goo-field" aria-hidden="true">
+            <span style="width: 46%; aspect-ratio: 1; left: -6%; top: 10%; background: var(--state-action); opacity: 0.22; animation: blob-drift-a 22s ease-in-out infinite;"></span>
+            <span style="width: 38%; aspect-ratio: 1; right: -4%; top: -6%; background: var(--state-success); opacity: 0.18; animation: blob-drift-b 26s ease-in-out infinite;"></span>
+            <span style="width: 32%; aspect-ratio: 1; right: 12%; bottom: -12%; background: var(--state-info); opacity: 0.16; animation: blob-drift-a 19s ease-in-out infinite reverse;"></span>
+        </div>
+
         <p v-reveal class="eyebrow">{{ t("ecosystem").eyebrow }}</p>
         <h2 v-reveal="60" class="section-title">{{ t("ecosystem").title }}</h2>
         <p v-reveal="100" class="lede">{{ t("ecosystem").lede }}</p>
@@ -34,7 +40,7 @@ const items = computed(() =>
                 v-for="(item, i) in items"
                 :key="item.id"
                 v-reveal="i * 80"
-                class="card"
+                class="card card-pop"
                 :class="{ current: item.current }"
                 v-bind="item.href ? { href: item.href, target: '_blank', rel: 'noreferrer' } : {}"
             >
@@ -49,7 +55,13 @@ const items = computed(() =>
 
 <style scoped>
 .ecosystem {
+    position: relative;
     padding-block: 6rem;
+}
+
+.ecosystem > *:not(.goo-field) {
+    position: relative;
+    z-index: 1;
 }
 
 .section-title {
@@ -83,17 +95,12 @@ const items = computed(() =>
     background: linear-gradient(155deg, var(--ink-2), var(--ink-1));
     text-decoration: none;
     color: inherit;
-    transition: border-color 220ms var(--ease-out-expo), transform 220ms var(--ease-out-expo);
-}
-
-a.card:hover {
-    border-color: var(--accent);
-    transform: translateY(-3px);
 }
 
 .card.current {
     border-color: var(--accent);
     cursor: default;
+    box-shadow: var(--glow-accent);
 }
 
 .tag {
@@ -134,6 +141,12 @@ a.card:hover .cta {
 }
 
 @media (max-width: 900px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 620px) {
     .grid {
         grid-template-columns: 1fr;
     }

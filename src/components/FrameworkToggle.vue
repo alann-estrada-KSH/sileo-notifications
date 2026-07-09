@@ -1,5 +1,26 @@
 <script setup lang="ts">
-import { framework, setFramework } from "../framework";
+import { useRoute, useRouter } from "vue-router";
+import { framework, setFramework, type Framework } from "../framework";
+import { DOCS_BY_FRAMEWORK, DEFAULT_SLUG } from "../docs-content";
+
+const route = useRoute();
+const router = useRouter();
+
+// On a docs page the URL (not just the toggle) encodes the framework, so
+// switching has to navigate — otherwise the toggle would show "Flutter"
+// active while the page still renders the Vue doc it was already on.
+// Same slug carries over if it exists for the target framework (both have
+// "styling"), otherwise falls back to that framework's overview.
+const choose = (next: Framework) => {
+    if (route.path.startsWith("/docs")) {
+        const slug = typeof route.params.slug === "string" ? route.params.slug : DEFAULT_SLUG;
+        const carriesOver = DOCS_BY_FRAMEWORK[next].some((doc) => doc.slug === slug);
+        const targetSlug = carriesOver ? slug : DEFAULT_SLUG;
+        router.push(targetSlug === DEFAULT_SLUG ? `/docs/${next}` : `/docs/${next}/${targetSlug}`);
+        return;
+    }
+    setFramework(next);
+};
 </script>
 
 <template>
@@ -9,14 +30,14 @@ import { framework, setFramework } from "../framework";
             class="fw-btn"
             :class="{ active: framework === 'vue' }"
             :aria-pressed="framework === 'vue'"
-            @click="setFramework('vue')"
+            @click="choose('vue')"
         >Vue</button>
         <button
             type="button"
             class="fw-btn"
             :class="{ active: framework === 'flutter' }"
             :aria-pressed="framework === 'flutter'"
-            @click="setFramework('flutter')"
+            @click="choose('flutter')"
         >Flutter</button>
     </div>
 </template>

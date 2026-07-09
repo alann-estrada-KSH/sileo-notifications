@@ -4,6 +4,7 @@ import { Toaster, sileo } from "@alann-estrada-ksh/sileo-vue";
 import { t } from "../i18n";
 import { pageTheme } from "../theme";
 import { framework, FRAMEWORK_META } from "../framework";
+import { navHeight } from "../lib/navMetrics";
 
 // Toasts are compatible with both light and dark themes independently of the
 // page chrome, but starting from whichever the page is currently in reads as
@@ -13,9 +14,13 @@ const demoTheme = ref<"dark" | "light" | "colored">(pageTheme.value);
 // The site nav is `position: relative` (scrolls away with the page), while
 // the toast viewport is always `position: fixed`. A static top offset large
 // enough to clear the nav at scrollY 0 looks needlessly low once the nav has
-// scrolled out of view. Shrink the offset as the page scrolls so it only
-// clears the nav while the nav is actually on screen.
-const NAV_CLEARANCE = 104;
+// scrolled out of view — and a hardcoded pixel guess breaks the moment the
+// nav grows a row (e.g. the framework toggle wrapping on a narrow screen), so
+// this reads the nav's real measured height (navMetrics.ts) instead. Shrink
+// the offset as the page scrolls so it only clears the nav while it's on
+// screen; a toast fired from the hero at scrollY 0 still lands below the nav
+// instead of behind it.
+const NAV_GAP = 16;
 const DEFAULT_OFFSET = 12;
 const scrollY = ref(typeof window === "undefined" ? 0 : window.scrollY);
 const onScroll = () => {
@@ -24,7 +29,7 @@ const onScroll = () => {
 onMounted(() => window.addEventListener("scroll", onScroll, { passive: true }));
 onUnmounted(() => window.removeEventListener("scroll", onScroll));
 const toasterOffset = computed(() => ({
-    top: Math.max(DEFAULT_OFFSET, NAV_CLEARANCE - scrollY.value),
+    top: Math.max(DEFAULT_OFFSET, navHeight.value + NAV_GAP - scrollY.value),
 }));
 
 const fireSuccess = () => {

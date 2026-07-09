@@ -6,6 +6,10 @@ import { framework, FRAMEWORK_META } from "../framework";
 <template>
     <section id="community" class="community container">
         <div v-reveal class="panel">
+            <div class="goo-field" aria-hidden="true">
+                <span style="width: 42%; aspect-ratio: 1; left: -8%; bottom: -18%; background: var(--state-warning); opacity: 0.16; animation: blob-drift-b 24s ease-in-out infinite;"></span>
+                <span style="width: 30%; aspect-ratio: 1; right: 4%; top: -14%; background: var(--accent); opacity: 0.2; animation: blob-drift-a 20s ease-in-out infinite;"></span>
+            </div>
             <div class="copy">
                 <p class="eyebrow">{{ t("community").eyebrow }}</p>
                 <h2 class="section-title">{{ t("community").title }}</h2>
@@ -35,6 +39,8 @@ import { framework, FRAMEWORK_META } from "../framework";
 }
 
 .panel {
+    position: relative;
+    overflow: hidden;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -44,6 +50,11 @@ import { framework, FRAMEWORK_META } from "../framework";
     border-radius: var(--radius-lg);
     border: 1px solid var(--line);
     background: linear-gradient(155deg, var(--ink-2), var(--ink-1));
+}
+
+.panel > *:not(.goo-field) {
+    position: relative;
+    z-index: 1;
 }
 
 .copy {
@@ -95,6 +106,7 @@ import { framework, FRAMEWORK_META } from "../framework";
 
 .btn.primary:hover {
     opacity: 0.9;
+    box-shadow: var(--glow-accent);
 }
 
 @media (max-width: 700px) {
