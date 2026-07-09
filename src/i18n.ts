@@ -56,6 +56,7 @@ interface Messages {
         copied: string;
         tryLive: string;
         viewSource: string;
+        viaCdn: string;
     };
     playground: {
         eyebrow: string;
@@ -139,6 +140,7 @@ const messages: Record<Locale, Messages> = {
             copied: "copied",
             tryLive: "Try it live ↓",
             viewSource: "View source",
+            viaCdn: "Also on jsDelivr (CDN, no bundler) ↗",
         },
         playground: {
             eyebrow: "try it",
@@ -293,6 +295,7 @@ const messages: Record<Locale, Messages> = {
             copied: "copiado",
             tryLive: "Pruébalo en vivo ↓",
             viewSource: "Ver código fuente",
+            viaCdn: "También en jsDelivr (CDN, sin bundler) ↗",
         },
         playground: {
             eyebrow: "pruébalo",

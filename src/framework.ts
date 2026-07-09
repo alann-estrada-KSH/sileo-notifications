@@ -17,11 +17,13 @@ export const setFramework = (next: Framework) => {
     if (typeof window !== "undefined") window.localStorage.setItem(STORAGE_KEY, next);
 };
 
-export const FRAMEWORK_META: Record<Framework, { label: string; repo: string; install: string }> = {
+export const FRAMEWORK_META: Record<Framework, { label: string; repo: string; install: string; cdn?: string }> = {
     vue: {
         label: "Vue 3",
         repo: "https://github.com/alann-estrada-KSH/sileo-vue",
         install: "npm install @alann-estrada-ksh/sileo-vue",
+        // No-bundler option, for anyone not already inside a Vue/npm toolchain.
+        cdn: "https://www.jsdelivr.com/package/npm/@alann-estrada-ksh/sileo-vue",
     },
     flutter: {
         label: "Flutter",

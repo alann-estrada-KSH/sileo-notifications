@@ -54,6 +54,13 @@ const copyInstall = async () => {
                         target="_blank"
                         rel="noreferrer"
                     >{{ t("hero").viewSource }}</a>
+                    <a
+                        v-if="FRAMEWORK_META[framework].cdn"
+                        class="btn-ghost"
+                        :href="FRAMEWORK_META[framework].cdn"
+                        target="_blank"
+                        rel="noreferrer"
+                    >{{ t("hero").viaCdn }}</a>
                 </div>
             </div>
         </div>
@@ -164,7 +171,8 @@ const copyInstall = async () => {
 
 .link-row {
     display: flex;
-    gap: 1.25rem;
+    flex-wrap: wrap;
+    gap: 1rem 1.25rem;
 }
 
 .btn-ghost {
