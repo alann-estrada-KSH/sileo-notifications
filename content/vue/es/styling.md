@@ -6,7 +6,7 @@ sileo-vue expone un pequeño número de puntos de estilo para que mantengas los 
 
 Usa el campo `styles` para adjuntar clases personalizadas a partes específicas de una notificación.
 
-```ts
+```ts-demo
 sileo.success({
   title: "Custom styled",
   styles: {
@@ -48,7 +48,7 @@ sileo-vue usa variables CSS para la paleta principal de estados y los tokens de 
 
 Usa la opción `fill` cuando quieras que una notificación específica se aparte del tema por defecto.
 
-```ts
+```ts-demo
 sileo.success({
   title: "Saved",
   fill: "#171717",
@@ -63,7 +63,7 @@ sileo.success({
 
 `roundness` controla el radio de borde de la notificación.
 
-```ts
+```ts-demo
 sileo.success({
   title: "Sharp corners",
   roundness: 12,
@@ -111,7 +111,7 @@ Configurar `colors.background` en su lugar sobrescribe todos los estados con el 
 
 Pasa un objeto `colors` a `Toaster` para sobrescribir cualquier parte de la paleta sin escribir CSS. Todos los campos son opcionales — lo que no configures cae al valor por defecto del tema activo.
 
-```vue
+```vue-demo-custom
 <script setup lang="ts">
 import type { SileoColors } from "@alann-estrada-ksh/sileo-vue";
 

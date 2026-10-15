@@ -23,7 +23,7 @@ Comportamiento por defecto:
 
 Control por notificación:
 
-```ts
+```ts-demo
 sileo.info({
   title: "Upload complete",
   description: "Swipe up/down to dismiss",
@@ -33,7 +33,7 @@ sileo.info({
 
 Deshabilitar para una notificación específica:
 
-```ts
+```ts-demo
 sileo.action({
   title: "Critical action",
   description: "Do not allow swipe dismiss",
@@ -63,7 +63,7 @@ Salida en tiempo de ejecución:
 
 Puedes adjuntar callbacks de ciclo de vida a cada notificación a través de `hooks`.
 
-```ts
+```ts-demo
 sileo.success({
   title: "Saved",
   description: "Changes were persisted",

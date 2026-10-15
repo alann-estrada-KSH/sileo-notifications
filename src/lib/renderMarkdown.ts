@@ -21,11 +21,30 @@ const rewriteRelativeDocLinks = (markdown: string, framework: Framework): string
 const COPY_ICON = `<svg class="icon-copy" viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M3.5 10.5v-6a1 1 0 0 1 1-1h6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>`;
 const CHECK_ICON = `<svg class="icon-check" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4L6.5 11.4L12.8 4.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
+const COPY_BUTTON = `<button type="button" class="copy-code-btn" aria-label="Copy code">${COPY_ICON}${CHECK_ICON}</button>`;
+
+// Fences tagged ts-demo / vue-demo-colored / vue-demo-custom get a Preview | Code
+// switcher: Preview runs the snippet against the live Toaster mounted by
+// DocsPage.vue. The theme variants set that Toaster's theme before firing
+// sample toasts, since a Toaster config block has nothing to call on its own.
+const DEMO_LANG = /^language-(ts-demo|vue-demo-colored|vue-demo-custom)$/;
+
 const wrapCodeBlocks = (html: string): string =>
     html.replace(
-        /<pre>(<code[^>]*>[\s\S]*?<\/code>)<\/pre>/g,
-        (_match, code) =>
-            `<div class="code-block"><pre>${code}</pre><button type="button" class="copy-code-btn" aria-label="Copy code">${COPY_ICON}${CHECK_ICON}</button></div>`,
+        /<pre><code(?: class="([^"]*)")?>([\s\S]*?)<\/code><\/pre>/g,
+        (_match, cls: string | undefined, code: string) => {
+            const lang = cls?.match(DEMO_LANG)?.[1];
+            if (!lang) {
+                return `<div class="code-block"><pre><code${cls ? ` class="${cls}"` : ""}>${code}</code></pre>${COPY_BUTTON}</div>`;
+            }
+            return `<div class="code-block demo-block" data-demo="${lang}" data-view="preview">`
+                + `<div class="demo-tabs" role="tablist">`
+                + `<button type="button" role="tab" class="demo-tab" data-view="preview" aria-selected="true">Preview</button>`
+                + `<button type="button" role="tab" class="demo-tab" data-view="code" aria-selected="false">Code</button>`
+                + `</div>`
+                + `<div class="demo-preview"><button type="button" class="demo-run"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6L13 8z" fill="currentColor"/></svg><span>Run example</span></button></div>`
+                + `<pre><code>${code}</code></pre>${COPY_BUTTON}</div>`;
+        },
     );
 
 // Content is our own build-time-imported markdown (see docs-content/index.ts),

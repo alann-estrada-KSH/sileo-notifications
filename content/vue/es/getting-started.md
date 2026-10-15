@@ -62,7 +62,7 @@ Si usas el ejemplo del repositorio, la app local ya importa la hoja de estilos f
 
 ## Primeros tipos de notificación
 
-```ts
+```ts-demo
 sileo.success({ title: "Done" });
 sileo.error({ title: "Upload failed" });
 sileo.warning({ title: "Quota almost full" });

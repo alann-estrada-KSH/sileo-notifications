@@ -62,7 +62,7 @@ If you are using the repository example, the local app already imports the sourc
 
 ## First Notification Types
 
-```ts
+```ts-demo
 sileo.success({ title: "Done" });
 sileo.error({ title: "Upload failed" });
 sileo.warning({ title: "Quota almost full" });

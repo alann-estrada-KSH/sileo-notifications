@@ -6,7 +6,7 @@ sileo-vue exposes a small number of styling hooks so you can keep the defaults o
 
 Use the `styles` field to attach custom classes to specific parts of a toast.
 
-```ts
+```ts-demo
 sileo.success({
   title: "Custom styled",
   styles: {
@@ -48,7 +48,7 @@ sileo-vue uses CSS variables for the main state palette and sizing tokens.
 
 Use the `fill` option when you want a specific toast to depart from the default theme.
 
-```ts
+```ts-demo
 sileo.success({
   title: "Saved",
   fill: "#171717",
@@ -63,7 +63,7 @@ sileo.success({
 
 `roundness` controls the toast border radius.
 
-```ts
+```ts-demo
 sileo.success({
   title: "Sharp corners",
   roundness: 12,
@@ -111,7 +111,7 @@ Setting `colors.background` instead overrides every state with the same flat col
 
 Pass a `colors` object to `Toaster` to override any part of the palette without writing CSS. Every field is optional — anything you don't set falls back to the active theme's default.
 
-```vue
+```vue-demo-custom
 <script setup lang="ts">
 import type { SileoColors } from "@alann-estrada-ksh/sileo-vue";
 

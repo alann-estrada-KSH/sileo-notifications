@@ -4,7 +4,7 @@ Esta página se enfoca en patrones de uso del mundo real.
 
 ## 1. Mensaje simple de éxito
 
-```ts
+```ts-demo
 sileo.success({
   title: "Saved",
   description: "Your changes were applied.",
@@ -13,7 +13,7 @@ sileo.success({
 
 ## 2. Notificación de acción
 
-```ts
+```ts-demo
 sileo.action({
   title: "New comment",
   description: "Open the thread to reply.",
@@ -26,7 +26,7 @@ sileo.action({
 
 ## 3. Flujo de carga a éxito
 
-```ts
+```ts-demo
 await sileo.promise(saveProfile(), {
   loading: {
     title: "Saving profile",
@@ -45,7 +45,7 @@ await sileo.promise(saveProfile(), {
 
 ## 4. Flujo de promesa a acción
 
-```ts
+```ts-demo
 await sileo.promise(fetchInvoice(), {
   loading: {
     title: "Creating invoice",
@@ -70,7 +70,7 @@ await sileo.promise(fetchInvoice(), {
 
 ## 5. Notificaciones en ráfaga agrupadas
 
-```ts
+```ts-demo
 sileo.info({ title: "File 1 uploaded", groupKey: "uploads" });
 sileo.info({ title: "File 2 uploaded", groupKey: "uploads" });
 sileo.info({ title: "File 3 uploaded", groupKey: "uploads" });
@@ -80,7 +80,7 @@ Cuando `Toaster grouping` está habilitado y la cubeta supera el umbral, sileo-v
 
 ## 6. Contenido de descripción enriquecido
 
-```ts
+```ts-demo
 import { h } from "vue";
 
 sileo.info({
@@ -94,7 +94,7 @@ sileo.info({
 
 ## 7. Notificación fija
 
-```ts
+```ts-demo
 sileo.info({
   title: "Pinned message",
   description: "This toast remains until dismissed manually.",
@@ -104,7 +104,7 @@ sileo.info({
 
 ## 8. Comportamiento y movimiento controlados
 
-```ts
+```ts-demo
 sileo.info({
   title: "Custom timing",
   description: "Expand/collapse can be tuned.",
@@ -122,7 +122,7 @@ sileo.info({
 
 ## 9. Paleta personalizada de marca
 
-```vue
+```vue-demo-custom
 <script setup lang="ts">
 import type { SileoColors } from "@alann-estrada-ksh/sileo-vue";
 
@@ -143,7 +143,7 @@ Ver [Estilos y temas](styling.md) para la lista completa de campos de `SileoColo
 
 ## 10. Notificaciones de color al estilo toastify
 
-```vue
+```vue-demo-colored
 <template>
   <Toaster theme="colored" />
 </template>
@@ -151,13 +151,69 @@ Ver [Estilos y temas](styling.md) para la lista completa de campos de `SileoColo
 
 Ahora el fondo de cada notificación coincide con su propio estado — éxito es verde, error es rojo, etc. — con el título, la descripción y el badge cambiando automáticamente a un color claro legible. Sobrescribe un solo estado manteniendo el resto:
 
-```vue
+```vue-demo-colored
 <template>
   <Toaster theme="colored" :colors="{ success: '#059669' }" />
 </template>
 ```
 
-## 11. Configuración sugerida del shell de la app
+## 11. Full dark vs. acento oscuro
+
+`fill` cambia la superficie de un toast. Un fill casi negro sobre una página clara funciona como acento; `black` puro es full dark, así que aclara el texto con `styles`.
+
+```ts-demo
+sileo.success({ title: "Guardado", fill: "#171717" });
+
+sileo.success({
+  title: "Reserva confirmada",
+  description: "Tu asiento está reservado.",
+  fill: "black",
+  styles: { title: "text-white!", description: "text-white/75!" },
+});
+```
+
+## 12. Con o sin parte desplegable
+
+El panel desplegable solo existe cuando el toast tiene `description` (o un `button`). Omite ambos para una píldora simple que nunca se expande.
+
+```ts-demo
+sileo.info({ title: "Solo píldora, nada que expandir" });
+
+sileo.info({
+  title: "Desplegable",
+  description: "Pasa el cursor o espera al autopilot para ver este panel.",
+});
+```
+
+## 13. Roundness
+
+```ts-demo
+sileo.info({ title: "Roundness 6", description: "Esquinas más rectas.", roundness: 6 });
+sileo.info({ title: "Roundness 24", description: "Esquinas más suaves.", roundness: 24 });
+```
+
+## 14. Descripción rica con avatares
+
+`description` acepta cualquier contenido de render de Vue, no solo texto.
+
+```ts-demo
+import { h } from "vue";
+
+const avatar = (bg, label) =>
+  h("span", {
+    style: `display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:999px;background:${bg};color:#fff;font-size:11px;box-shadow:0 0 0 2px #fff;margin-right:-8px`,
+  }, label);
+
+sileo.info({
+  title: "Novedades del equipo",
+  description: h("div", { style: "display:flex;flex-direction:column;gap:8px" }, [
+    h("div", { style: "display:flex" }, [avatar("#6366f1", "AL"), avatar("#ec4899", "MR"), avatar("#14b8a6", "JT")]),
+    h("span", { style: "font-size:12px" }, "3 miembros nuevos se unieron al proyecto."),
+  ]),
+});
+```
+
+## 15. Configuración sugerida del shell de la app
 
 ```vue
 <template>

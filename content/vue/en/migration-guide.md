@@ -28,7 +28,7 @@ If you are upgrading from an earlier React-based version or from an older Vue sn
 
 ## Example of a Ported Notification
 
-```ts
+```ts-demo
 sileo.action({
   title: "New lead",
   description: "Open the lead details to continue.",

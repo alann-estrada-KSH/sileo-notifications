@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { computed, watch } from "vue";
+import { computed, h, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import { Toaster, sileo } from "@alann-estrada-ksh/sileo-vue";
+import { pageTheme } from "../theme";
 import { t, locale } from "../i18n";
 import { framework, setFramework, type Framework } from "../framework";
 import { DOCS_BY_FRAMEWORK, DEFAULT_SLUG, DOC_REPO_PATH, findDoc } from "../docs-content";
@@ -34,7 +36,77 @@ const githubUrl = computed(
 // Code blocks are raw HTML (v-html, see renderMarkdown's wrapCodeBlocks) —
 // Vue can't bind a handler to a button that isn't a real Vue element, so
 // this delegates from the .prose container instead of one listener per block.
+// Demo blocks (renderMarkdown's ts-demo / vue-demo-*) run against this page's
+// own Toaster. Snippets are our build-time docs content, never user input, so
+// evaluating them is the same trust level as the markdown itself.
+const demoTheme = ref<"dark" | "light" | "colored" | "custom">(pageTheme.value);
+const demoColors = {
+    background: "#1b1030",
+    foreground: "#f4e9ff",
+    description: "#c9b8e8",
+    dismissBackground: "#4b3869",
+    success: "#7dffb3",
+    error: "#ff6b81",
+    warning: "#ffd166",
+    info: "#7dc4ff",
+    action: "#c792ff",
+    loading: "#a0a0c0",
+};
+watch(pageTheme, (value) => {
+    if (demoTheme.value === "dark" || demoTheme.value === "light") demoTheme.value = value;
+});
+
+const delay = <T,>(value: T, ms = 1600) => new Promise<T>((resolve) => setTimeout(() => resolve(value), ms));
+const demoScope = {
+    sileo,
+    h,
+    router: { push: () => {} },
+    saveProfile: () => delay(undefined),
+    fetchInvoice: () => delay({ number: "INV-0042" }),
+    deploy: () => delay(undefined),
+};
+
+const runDemo = async (kind: string, code: string) => {
+    if (kind === "ts-demo") {
+        demoTheme.value = pageTheme.value;
+        const body = code.replace(/^\s*import\s.+$/gm, "");
+        const names = Object.keys(demoScope);
+        const run = new Function(...names, `return (async () => {\n${body}\n})();`);
+        try {
+            await run(...names.map((name) => demoScope[name as keyof typeof demoScope]));
+        } catch (error) {
+            console.error("docs demo failed", error);
+        }
+        return;
+    }
+    demoTheme.value = kind === "vue-demo-colored" ? "colored" : "custom";
+    sileo.success({ title: "Deploy complete", description: "All containers are healthy." });
+    sileo.error({ title: "Sync failed", description: "Retrying in 30 seconds." });
+    sileo.warning({ title: "Quota almost full", description: "You are at 92% of your plan." });
+};
+
 const onProseClick = async (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+
+    const tab = target.closest<HTMLButtonElement>(".demo-tab");
+    if (tab) {
+        const block = tab.closest<HTMLElement>(".demo-block");
+        if (!block) return;
+        block.dataset.view = tab.dataset.view;
+        for (const other of block.querySelectorAll<HTMLButtonElement>(".demo-tab")) {
+            other.setAttribute("aria-selected", String(other === tab));
+        }
+        return;
+    }
+
+    const run = target.closest<HTMLButtonElement>(".demo-run");
+    if (run) {
+        const block = run.closest<HTMLElement>(".demo-block");
+        const code = block?.querySelector("code")?.textContent;
+        if (block?.dataset.demo && code) await runDemo(block.dataset.demo, code);
+        return;
+    }
+
     const btn = (event.target as HTMLElement).closest<HTMLButtonElement>(".copy-code-btn");
     if (!btn) return;
     const code = btn.closest(".code-block")?.querySelector("code");
@@ -72,6 +144,14 @@ const onProseClick = async (event: MouseEvent) => {
 
             <article class="prose" v-html="renderedHtml" @click="onProseClick"></article>
         </div>
+
+        <Toaster
+            position="top-right"
+            :theme="demoTheme"
+            :colors="demoTheme === 'custom' ? demoColors : undefined"
+            :options="{ autopilot: { expand: 180, collapse: 3200 } }"
+            :offset="{ top: 72 }"
+        />
 
         <a class="github-link" :href="githubUrl" target="_blank" rel="noreferrer">{{ t("docsPage").viewOnGithub }}</a>
     </div>
@@ -327,6 +407,91 @@ const onProseClick = async (event: MouseEvent) => {
     .prose :deep(.copy-code-btn) {
         opacity: 1;
     }
+}
+
+.prose :deep(.demo-tabs) {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0.35rem;
+    border: 1px solid var(--line);
+    border-bottom: 0;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    background: var(--ink-1);
+}
+
+.prose :deep(.demo-tab) {
+    padding: 0.3rem 0.8rem;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: none;
+    color: var(--paper-faint);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: color 160ms var(--ease-out-expo), background 160ms var(--ease-out-expo);
+}
+
+.prose :deep(.demo-tab:hover) {
+    color: var(--paper);
+}
+
+.prose :deep(.demo-tab[aria-selected="true"]) {
+    color: var(--accent);
+    background: var(--ink-0);
+}
+
+.prose :deep(.demo-preview) {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    border: 1px solid var(--line);
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    background:
+        radial-gradient(circle at 1px 1px, var(--line) 1px, transparent 0) 0 0 / 18px 18px,
+        var(--ink-0);
+}
+
+.prose :deep(.demo-block[data-view="preview"] .demo-preview) {
+    display: flex;
+}
+
+.prose :deep(.demo-block[data-view="preview"] pre),
+.prose :deep(.demo-block[data-view="preview"] .copy-code-btn) {
+    display: none;
+}
+
+.prose :deep(.demo-block pre) {
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+.prose :deep(.demo-block .copy-code-btn) {
+    top: 3.4rem;
+}
+
+.prose :deep(.demo-run) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.1rem;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 160ms var(--ease-out-expo), color 160ms var(--ease-out-expo);
+}
+
+.prose :deep(.demo-run:hover) {
+    background: var(--accent);
+    color: var(--ink-0);
+}
+
+.prose :deep(.demo-run svg) {
+    width: 14px;
+    height: 14px;
 }
 
 .prose :deep(table) {

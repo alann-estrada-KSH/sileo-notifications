@@ -23,7 +23,7 @@ Default behavior:
 
 Per-toast control:
 
-```ts
+```ts-demo
 sileo.info({
   title: "Upload complete",
   description: "Swipe up/down to dismiss",
@@ -33,7 +33,7 @@ sileo.info({
 
 Disable for a specific toast:
 
-```ts
+```ts-demo
 sileo.action({
   title: "Critical action",
   description: "Do not allow swipe dismiss",
@@ -63,7 +63,7 @@ Runtime output:
 
 You can attach lifecycle callbacks to each toast through `hooks`.
 
-```ts
+```ts-demo
 sileo.success({
   title: "Saved",
   description: "Changes were persisted",

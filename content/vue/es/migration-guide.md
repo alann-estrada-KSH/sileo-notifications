@@ -28,7 +28,7 @@ Si estás actualizando desde una versión anterior basada en React o desde una v
 
 ## Ejemplo de una notificación migrada
 
-```ts
+```ts-demo
 sileo.action({
   title: "New lead",
   description: "Open the lead details to continue.",
