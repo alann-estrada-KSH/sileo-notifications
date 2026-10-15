@@ -6,8 +6,8 @@ Esta página se enfoca en patrones de uso del mundo real.
 
 ```ts-demo
 sileo.success({
-  title: "Saved",
-  description: "Your changes were applied.",
+  title: "Guardado",
+  description: "Tus cambios se aplicaron.",
 });
 ```
 
@@ -15,10 +15,10 @@ sileo.success({
 
 ```ts-demo
 sileo.action({
-  title: "New comment",
-  description: "Open the thread to reply.",
+  title: "Nuevo comentario",
+  description: "Abre el hilo para responder.",
   button: {
-    title: "Open",
+    title: "Abrir",
     onClick: () => router.push("/thread/123"),
   },
 });
@@ -29,15 +29,15 @@ sileo.action({
 ```ts-demo
 await sileo.promise(saveProfile(), {
   loading: {
-    title: "Saving profile",
-    description: "Please wait...",
+    title: "Guardando perfil",
+    description: "Espera un momento...",
   },
   success: () => ({
-    title: "Profile saved",
-    description: "Your settings are now up to date.",
+    title: "Perfil guardado",
+    description: "Tus ajustes ya están al día.",
   }),
   error: (err) => ({
-    title: "Save failed",
+    title: "Error al guardar",
     description: String(err),
   }),
 });
@@ -48,22 +48,22 @@ await sileo.promise(saveProfile(), {
 ```ts-demo
 await sileo.promise(fetchInvoice(), {
   loading: {
-    title: "Creating invoice",
+    title: "Creando factura",
   },
   success: (invoice) => ({
-    title: "Invoice ready",
+    title: "Factura lista",
     description: invoice.number,
   }),
   action: (invoice) => ({
-    title: "Invoice ready",
+    title: "Factura lista",
     description: invoice.number,
     button: {
-      title: "Copy number",
+      title: "Copiar número",
       onClick: () => navigator.clipboard.writeText(invoice.number),
     },
   }),
   error: {
-    title: "Invoice could not be created",
+    title: "No se pudo crear la factura",
   },
 });
 ```
@@ -71,9 +71,9 @@ await sileo.promise(fetchInvoice(), {
 ## 5. Notificaciones en ráfaga agrupadas
 
 ```ts-demo
-sileo.info({ title: "File 1 uploaded", groupKey: "uploads" });
-sileo.info({ title: "File 2 uploaded", groupKey: "uploads" });
-sileo.info({ title: "File 3 uploaded", groupKey: "uploads" });
+sileo.info({ title: "Archivo 1 subido", groupKey: "uploads" });
+sileo.info({ title: "Archivo 2 subido", groupKey: "uploads" });
+sileo.info({ title: "Archivo 3 subido", groupKey: "uploads" });
 ```
 
 Cuando `Toaster grouping` está habilitado y la cubeta supera el umbral, sileo-vue colapsa el conjunto en una píldora resumen.
@@ -84,10 +84,10 @@ Cuando `Toaster grouping` está habilitado y la cubeta supera el umbral, sileo-v
 import { h } from "vue";
 
 sileo.info({
-  title: "Team update",
+  title: "Novedades del equipo",
   description: h("div", { class: "stack" }, [
-    h("strong", "3 members joined"),
-    h("span", "A new workspace has been provisioned."),
+    h("strong", "3 miembros se unieron"),
+    h("span", "Se creó un nuevo espacio de trabajo."),
   ]),
 });
 ```
@@ -96,8 +96,8 @@ sileo.info({
 
 ```ts-demo
 sileo.info({
-  title: "Pinned message",
-  description: "This toast remains until dismissed manually.",
+  title: "Mensaje fijado",
+  description: "Esta notificación permanece hasta cerrarla manualmente.",
   duration: null,
 });
 ```
@@ -106,8 +106,8 @@ sileo.info({
 
 ```ts-demo
 sileo.info({
-  title: "Custom timing",
-  description: "Expand/collapse can be tuned.",
+  title: "Tiempos personalizados",
+  description: "La expansión y el colapso se pueden ajustar.",
   autopilot: {
     expand: 300,
     collapse: 2400,

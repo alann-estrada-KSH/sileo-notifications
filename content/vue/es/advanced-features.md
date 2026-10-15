@@ -25,8 +25,8 @@ Control por notificación:
 
 ```ts-demo
 sileo.info({
-  title: "Upload complete",
-  description: "Swipe up/down to dismiss",
+  title: "Subida completa",
+  description: "Desliza arriba o abajo para cerrar",
   swipeToDismiss: true,
 });
 ```
@@ -35,8 +35,8 @@ Deshabilitar para una notificación específica:
 
 ```ts-demo
 sileo.action({
-  title: "Critical action",
-  description: "Do not allow swipe dismiss",
+  title: "Acción crítica",
+  description: "No permitir cerrar deslizando",
   swipeToDismiss: false,
 });
 ```
@@ -65,8 +65,8 @@ Puedes adjuntar callbacks de ciclo de vida a cada notificación a través de `ho
 
 ```ts-demo
 sileo.success({
-  title: "Saved",
-  description: "Changes were persisted",
+  title: "Guardado",
+  description: "Los cambios se guardaron",
   hooks: {
     onShow: (ctx) => console.log("show", ctx),
     onExpand: (ctx) => console.log("expand", ctx),

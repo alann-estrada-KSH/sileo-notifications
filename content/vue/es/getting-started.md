@@ -36,7 +36,7 @@ import { sileo, Toaster } from "@alann-estrada-ksh/sileo-vue";
 
 const notify = () => {
   sileo.info({
-    title: "Saved",
+    title: "Guardado",
     description: "Your changes were stored.",
   });
 };
@@ -63,11 +63,11 @@ Si usas el ejemplo del repositorio, la app local ya importa la hoja de estilos f
 ## Primeros tipos de notificación
 
 ```ts-demo
-sileo.success({ title: "Done" });
-sileo.error({ title: "Upload failed" });
-sileo.warning({ title: "Quota almost full" });
-sileo.info({ title: "Sync complete" });
-sileo.action({ title: "New message", button: { title: "Open", onClick() {} } });
+sileo.success({ title: "Listo" });
+sileo.error({ title: "Falló la subida" });
+sileo.warning({ title: "Cuota casi llena" });
+sileo.info({ title: "Sincronización completa" });
+sileo.action({ title: "Nuevo mensaje", button: { title: "Abrir", onClick() {} } });
 ```
 
 ## Siguiente paso

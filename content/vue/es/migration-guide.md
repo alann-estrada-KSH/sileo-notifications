@@ -30,10 +30,10 @@ Si estás actualizando desde una versión anterior basada en React o desde una v
 
 ```ts-demo
 sileo.action({
-  title: "New lead",
-  description: "Open the lead details to continue.",
+  title: "Nuevo lead",
+  description: "Abre el detalle del lead para continuar.",
   button: {
-    title: "Open",
+    title: "Abrir",
     onClick: () => openLead(),
   },
   hooks: {

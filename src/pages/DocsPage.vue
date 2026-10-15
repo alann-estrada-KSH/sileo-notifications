@@ -27,7 +27,7 @@ const docPath = (fw: Framework, slug: string) => (slug === DEFAULT_SLUG ? `/docs
 const docs = computed(() => DOCS_BY_FRAMEWORK[routeFramework.value]);
 const activeSlug = computed(() => (typeof route.params.slug === "string" ? route.params.slug : DEFAULT_SLUG));
 const activeDoc = computed(() => findDoc(routeFramework.value, activeSlug.value));
-const renderedHtml = computed(() => renderMarkdown(activeDoc.value.raw[locale.value], routeFramework.value));
+const renderedHtml = computed(() => renderMarkdown(activeDoc.value.raw[locale.value], routeFramework.value, t("docsPage").demo));
 
 const githubUrl = computed(
     () => `${DOC_REPO_PATH[routeFramework.value]}/${activeDoc.value.slug}.md`,
@@ -80,9 +80,10 @@ const runDemo = async (kind: string, code: string) => {
         return;
     }
     demoTheme.value = kind === "vue-demo-colored" ? "colored" : "custom";
-    sileo.success({ title: "Deploy complete", description: "All containers are healthy." });
-    sileo.error({ title: "Sync failed", description: "Retrying in 30 seconds." });
-    sileo.warning({ title: "Quota almost full", description: "You are at 92% of your plan." });
+    const sample = t("playground").toasts;
+    sileo.success({ title: sample.successTitle, description: sample.successDesc });
+    sileo.error({ title: sample.errorTitle, description: sample.errorDesc });
+    sileo.warning({ title: sample.warningTitle, description: sample.warningDesc });
 };
 
 const onProseClick = async (event: MouseEvent) => {

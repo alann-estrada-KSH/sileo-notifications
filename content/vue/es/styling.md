@@ -8,7 +8,7 @@ Usa el campo `styles` para adjuntar clases personalizadas a partes específicas 
 
 ```ts-demo
 sileo.success({
-  title: "Custom styled",
+  title: "Estilo personalizado",
   styles: {
     title: "text-white!",
     description: "text-white/75!",
@@ -50,7 +50,7 @@ Usa la opción `fill` cuando quieras que una notificación específica se aparte
 
 ```ts-demo
 sileo.success({
-  title: "Saved",
+  title: "Guardado",
   fill: "#171717",
   styles: {
     title: "text-white!",
@@ -65,7 +65,7 @@ sileo.success({
 
 ```ts-demo
 sileo.success({
-  title: "Sharp corners",
+  title: "Esquinas rectas",
   roundness: 12,
 });
 ```

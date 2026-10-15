@@ -118,6 +118,7 @@ interface Messages {
     docsPage: {
         backHome: string;
         viewOnGithub: string;
+        demo: { preview: string; code: string; run: string; copy: string };
     };
     footer: { docs: string; metaPrefix: string; credit: string };
 }
@@ -270,6 +271,7 @@ const messages: Record<Locale, Messages> = {
         docsPage: {
             backHome: "← Back to home",
             viewOnGithub: "View on GitHub ↗",
+            demo: { preview: "Preview", code: "Code", run: "Run example", copy: "Copy code" },
         },
         footer: {
             docs: "Docs",
@@ -425,6 +427,7 @@ const messages: Record<Locale, Messages> = {
         docsPage: {
             backHome: "← Volver al inicio",
             viewOnGithub: "Ver en GitHub ↗",
+            demo: { preview: "Vista previa", code: "Código", run: "Ejecutar ejemplo", copy: "Copiar código" },
         },
         footer: {
             docs: "Documentación",
